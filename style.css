@@ -38,6 +38,12 @@ main, .masthead, footer, .site-head {
   border-bottom: 1px solid var(--line);
   font-size: 16px;
   letter-spacing: 1px;
+  /* brand link left, header clock right; wraps on narrow screens */
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 2px 16px;
 }
 section h2 {
   font-size: 22px;
@@ -98,10 +104,83 @@ footer {
 }
 footer p { margin: 0 0 6px; }
 footer .fine { font-size: 13px; letter-spacing: 1px; }
+/* ---- header clock (all pages; markup from clock_html() in
+   build_site.py, values filled in by the inline script it appends).
+   Small muted text so it never competes with the page title. ---- */
+.head-clock { font-size: 13px; color: var(--muted); white-space: nowrap; }
+.head-clock .hc-time { font-variant-numeric: tabular-nums; }
+.head-clock .hc-sep { margin: 0 7px; }
+.mast-clock { margin: 0 0 8px; text-align: right; }
+/* ---- story pages: two-column layout with sticky sidebar ----
+   Only story pages contain .story-layout, so these rules cannot leak
+   into the index or about pages; the English build reuses the same
+   classes. The text column keeps its original 720px measure (~68% of
+   the 1096px container) and the sidebar is a fixed 300px column that
+   sticks to the viewport top and scrolls internally when taller. */
+.story-layout {
+  max-width: 1096px;
+  margin: 0 auto;
+  padding: 0 20px;
+  display: flex;
+  gap: 36px;
+  align-items: flex-start;
+}
+.story-layout .story-main {
+  flex: 1 1 auto;
+  min-width: 0;
+  max-width: 720px;
+  margin: 0;
+  padding: 0;
+}
+.story-side {
+  flex: 0 0 300px;
+  width: 300px;
+  position: sticky;
+  top: 12px;
+  max-height: calc(100vh - 24px);
+  overflow-y: auto;
+  margin-top: 26px;
+}
+.side-nav {
+  border: 1px solid var(--line);
+  border-radius: 4px;
+  background: #FFFFFF;
+  padding: 14px 16px 6px;
+  font-size: 15px;
+  line-height: 1.6;
+}
+.side-title { margin: 0 0 4px; font-size: 16px; font-weight: 700; letter-spacing: 1px; }
+.side-group h3 { margin: 16px 0 6px; font-size: 14px; color: var(--accent); letter-spacing: 1px; }
+.side-group ul { list-style: none; margin: 0; padding: 0; }
+.side-group li { margin: 0 0 9px; padding: 2px 6px 2px 8px; border-left: 2px solid var(--line); }
+.side-group li a { display: block; color: var(--ink); font-weight: 700; font-size: 15px; line-height: 1.5; }
+.side-group li a:hover { color: var(--accent); text-decoration: none; }
+.side-hook { display: block; color: var(--muted); font-size: 13px; line-height: 1.55; }
+.side-group li.current { border-left-color: var(--accent); background: #FBF1EF; }
+.side-group li.current a { color: var(--accent); }
+/* Story pages: widen header/footer to the two-column container width
+   (progressive enhancement - without :has() they keep the 720px rule). */
+body:has(.story-layout) .site-head,
+body:has(.story-layout) footer { max-width: 1096px; }
+@media (max-width: 900px) {
+  /* Single column: article first, the full sidebar below it. */
+  .story-layout { flex-direction: column; }
+  .story-layout .story-main { align-self: center; width: 100%; }
+  .story-side {
+    position: static;
+    flex: none;
+    width: auto;
+    align-self: stretch;
+    max-height: none;
+    overflow-y: visible;
+    margin-top: 4px;
+  }
+}
 @media (max-width: 600px) {
   body { font-size: 18px; }
   .masthead { padding-top: 40px; }
   .masthead h1 { font-size: 28px; }
   article h1 { font-size: 24px; }
   .pager { flex-direction: column; gap: 8px; }
+  .head-clock { white-space: normal; }
 }
