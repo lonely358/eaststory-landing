@@ -111,6 +111,9 @@ footer .fine { font-size: 13px; letter-spacing: 1px; }
 .head-clock .hc-time { font-variant-numeric: tabular-nums; }
 .head-clock .hc-sep { margin: 0 7px; }
 .mast-clock { margin: 0 0 8px; text-align: right; }
+/* Language-switch link in page headers: same small muted register as
+   the clock, grouped with it on the right of the header. */
+.lang-link { color: var(--muted); font-size: 13px; margin-left: 10px; white-space: nowrap; }
 /* ---- story pages: two-column layout with sticky sidebar ----
    Only story pages contain .story-layout, so these rules cannot leak
    into the index or about pages; the English build reuses the same
